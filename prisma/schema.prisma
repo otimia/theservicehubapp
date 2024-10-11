@@ -14,20 +14,21 @@ datasource db {
 }
 
 model Profile {
-  id        String   @id @default(cuid())
-  clrkId    String   @unique
-  email     String   @unique
-  name      String?
-  image     String?
-  role      Role     @default(USER)
-  admin     Admin?   @relation(fields: [adminId], references: [id])
-  adminId   String?  @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String             @id @default(uuid())
+  clrkId           String             @unique
+  email            String             @unique
+  name             String?
+  image            String?
+  role             Role               @default(USER)
+  admin            Admin?             @relation(fields: [adminId], references: [id])
+  adminId          String?            @unique
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  WorkspaceProfile WorkspaceProfile[]
 }
 
 model Admin {
-  id         String      @id @default(cuid())
+  id         String      @id @default(uuid())
   userId     String      @unique
   workspaces Workspace[]
   createdAt  DateTime    @default(now())
@@ -35,13 +36,22 @@ model Admin {
   Profile    Profile[]
 }
 
+model WorkspaceProfile {
+  id          String    @id @default(uuid())
+  workspaceId String
+  profileId   String
+  Workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  Profile     Profile   @relation(fields: [profileId], references: [id])
+}
+
 model Workspace {
-  id        String   @id @default(cuid())
-  name      String
-  adminId   String
-  admin     Admin    @relation(fields: [adminId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String             @id @default(uuid())
+  name             String
+  adminId          String
+  admin            Admin              @relation(fields: [adminId], references: [id])
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  WorkspaceProfile WorkspaceProfile[]
 }
 
 enum Role {

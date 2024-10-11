@@ -7,8 +7,8 @@ import { useRouter, usePathname } from 'next/navigation';
 const dummyMenuItems = [
     {
         label: "Workspace",
-        value: "admin",
-        href: "admin",
+        value: "workspace",
+        href: "workspace",
         icon: Home,
         submenu: [
             { label: "Submenu Item 1.1", value: "value1.1", href: "#" },
@@ -48,18 +48,18 @@ const dummyMenuItems = [
 ];
 
 type Params = {
-    workspaceId: string
+    adminId: string
 }
 
-const SidebarAdmin = ({ workspaceId }: Params) => {
+const SidebarAdmin = ({ adminId }: Params) => {
     const router = useRouter()
     const pathname = usePathname()
     return (
         <div className='' >
             <ul className=''>
                 {dummyMenuItems?.map((item, index) => (
-                    <MenuItem className={(pathname.endsWith(`/${item.value}`) || pathname.split('/').slice(-2)[0] === item.value) ? 'bg-muted text-primary mb-2' : ''} key={index} menuItem={[item]} onClick={() => { router.push(`/workspace/${workspaceId}/${item.value}`) }} >
-                        {(pathname.endsWith(`/${item.value}`) || pathname.split('/').slice(-2)[0] === item.value) && <SubMenuItem submenu={item.submenu} workspaceId={workspaceId} itemValue={item.value} />}
+                    <MenuItem className={(pathname.endsWith(`/${item.value}`) || pathname.split('/').slice(-2)[0] === item.value) ? 'bg-muted text-primary mb-2' : ''} key={index} menuItem={[item]} onClick={() => { router.push(`/admin/${adminId}/${item.value}`) }} >
+                        {(pathname.endsWith(`/${item.value}`) || pathname.split('/').slice(-2)[0] === item.value) && <SubMenuItem route='admin' submenu={item.submenu} workspaceId={adminId} itemValue={item.value} />}
                     </MenuItem>
                 ))}
             </ul>

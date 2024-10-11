@@ -9,18 +9,23 @@ export async function POST() {
         return NextResponse.redirect('/auth/sign-up')
     }
     const user = await currentUser()
+
+    if (!user) {
+        return NextResponse.redirect('/auth/sign-up')
+    }
+
     const profile = await db.profile.create({
         data: {
-            clrkId: session.userId,
+            clrkId: user.id,
             role: 'ADMIN',
             admin: {
                 create: {
-                    userId: session.userId,
+                    userId: session.userId!,
                 }
             },
-            email: user?.primaryEmailAddress,
-            image: user?.imageUrl,
-            name: user?.firstName + ' ' + user?.lastName,
+            email: user.emailAddresses[0].emailAddress,
+            image: user.imageUrl,
+            name: user.firstName + ' ' + user.lastName,
         }
     })
 

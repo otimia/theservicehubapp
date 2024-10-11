@@ -24,6 +24,7 @@ type SubMenuItemProps = {
     className?: string
     workspaceId: string
     itemValue: string
+    route: string
 }
 
 export default function MenuItem(props: Props) {
@@ -39,13 +40,13 @@ export default function MenuItem(props: Props) {
     </div>
 }
 
-export function SubMenuItem({ submenu, className, workspaceId, itemValue }: SubMenuItemProps) {
+export function SubMenuItem({ submenu, className, workspaceId, itemValue, route }: SubMenuItemProps) {
     const pathname = usePathname()
     const router = useRouter()
     return (
         <div>
             {submenu?.map((item, index) => (
-                <div key={index} className={cn("flex items-center gap-3 rounded-lg px-3 pb-2 text-muted-foreground transition-all hover:text-primary cursor-pointer",  pathname.endsWith(`/${item.value}`) ? "bg-muted text-primary" : "", className)} onClick={() => { router.push(`/workspace/${workspaceId}/${itemValue}/${item.value}`) }}>
+                <div key={index} className={cn("flex items-center gap-3 rounded-lg px-3 pb-2 text-muted-foreground transition-all hover:text-primary cursor-pointer", pathname.endsWith(`/${item.value}`) ? "bg-muted text-primary" : "", className)} onClick={() => { router.push(`/${route}/${workspaceId}/${itemValue}/${item.value}`) }}>
                     <Dot className="w-4 h-4" />
                     <span>{item.label}</span>
                 </div>
