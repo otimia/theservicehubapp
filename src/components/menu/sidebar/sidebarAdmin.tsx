@@ -1,14 +1,14 @@
 "use client"
 import React from 'react'
 import MenuItem, { SubMenuItem } from './menuItem';
-import { Home, Users, Package, ShoppingCart, LineChart, CircleUser } from 'lucide-react';
+import { Home, Users, Package, CircleUser } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 
 const dummyMenuItems = [
     {
-        label: "Menu Item 1",
-        value: "dashboard",
-        href: "dashboard",
+        label: "Workspace",
+        value: "admin",
+        href: "admin",
         icon: Home,
         submenu: [
             { label: "Submenu Item 1.1", value: "value1.1", href: "#" },
@@ -16,42 +16,23 @@ const dummyMenuItems = [
         ],
     },
     {
-        label: "Menu Item 2",
-        value: "value2",
-        href: "#",
+        label: "Members",
+        value: "members",
+        href: "members",
         icon: Users,
         submenu: [
             { label: "Submenu Item 2.1", value: "value2.1", href: "#" },
         ],
     },
     {
-        label: "Menu Item 3",
-        value: "value3",
-        href: "#",
+        label: "Billing",
+        value: "billing",
+        href: "billing",
         icon: Package,
         submenu: [
             { label: "Submenu Item 3.1", value: "value3.1", href: "#" },
             { label: "Submenu Item 3.2", value: "value3.2", href: "#" },
             { label: "Submenu Item 3.3", value: "value3.3", href: "#" },
-        ],
-    },
-    {
-        label: "Menu Item 4",
-        value: "value4",
-        href: "#",
-        icon: ShoppingCart,
-        submenu: [
-            { label: "Submenu Item 4.1", value: "value4.1", href: "#" },
-        ],
-    },
-    {
-        label: "Menu Item 5",
-        value: "value5",
-        href: "#",
-        icon: LineChart,
-        submenu: [
-            { label: "Submenu Item 5.1", value: "value5.1", href: "#" },
-            { label: "Submenu Item 5.2", value: "value5.2", href: "#" },
         ],
     },
     {
@@ -70,7 +51,7 @@ type Params = {
     workspaceId: string
 }
 
-const Sidebar = ({ workspaceId }: Params) => {
+const SidebarAdmin = ({ workspaceId }: Params) => {
     const router = useRouter()
     const pathname = usePathname()
     return (
@@ -86,4 +67,4 @@ const Sidebar = ({ workspaceId }: Params) => {
     )
 }
 
-export default Sidebar
+export default SidebarAdmin

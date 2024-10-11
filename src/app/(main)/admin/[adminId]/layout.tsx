@@ -31,9 +31,14 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import SidebarAdmin from "@/components/menu/sidebar/sidebarAdmin"
+import { SignOutButton } from "@clerk/nextjs"
 
+type Params = {
+  workspaceId: string
+}   
 
-export default function LayoutAdmin({ children }: { children: React.ReactNode }) {
+export default function LayoutAdmin({ children, params }: { children: React.ReactNode, params: Params }) {
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -50,54 +55,7 @@ export default function LayoutAdmin({ children }: { children: React.ReactNode })
           </div>
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-              <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Home className="h-4 w-4" />
-                Dashboard
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <ShoppingCart className="h-4 w-4" />
-                Orders
-                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                  6
-                </Badge>
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
-              >
-                <Package className="h-4 w-4" />
-                Products{" "}
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Users className="h-4 w-4" />
-                Customers
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <LineChart className="h-4 w-4" />
-                Analytics
-              </Link>
-              <ul className="menu bg-base-200 rounded-box w-56">
-                <li>
-                  <h2 className="menu-title">Title</h2>
-                  <ul>
-                    <li><a>Item 1</a></li>
-                    <li><a>Item 2</a></li>
-                    <li><a>Item 3</a></li>
-                  </ul>
-                </li>
-              </ul>
+              <SidebarAdmin workspaceId={params.workspaceId} />
             </nav>
           </div>
           <div className="mt-auto p-4">
@@ -222,12 +180,19 @@ export default function LayoutAdmin({ children }: { children: React.ReactNode })
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem>
+                <SignOutButton redirectUrl="/auth/sign-in">Logout</SignOutButton>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-          {children}
+        <main className="flex flex-1 flex-col gap-4 max-h-screen overflow-y-auto p-4 lg:gap-6 lg:p-6">
+          <div
+            className="flex flex-1 items-start p-4 justify-start rounded-lg border border-dashed shadow-sm" x-chunk="dashboard-02-chunk-1"
+          >
+            {children}
+
+          </div>
         </main>
       </div>
     </div>

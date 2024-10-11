@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import Sidebar from "@/components/menu/sidebar/sidebar"
+import Sidebar from "@/components/menu/sidebar/sidebarWorkspace"
 
 type Params = { 
   workspaceId: string
