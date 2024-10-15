@@ -50,11 +50,12 @@ model Workspace {
   adminId          String
   admin            Admin              @relation(fields: [adminId], references: [id])
   connectAccountId String?            @default("")
-  customerId       String             @default("")
+  customerId       String?            @default("")
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
   WorkspaceProfile WorkspaceProfile[]
-  Subscription     Subscription[]
+  Subscription     Subscription?
+  subscriptionId   String?            @unique
 }
 
 enum Role {
@@ -68,20 +69,27 @@ enum Plan {
   price_1OYxkqFj9oKEERu1KfJGWxgN
 }
 
+enum SubscriptionType {
+  freelance
+  business
+  enterprise
+  free
+}
+
 model Subscription {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  plan      Plan?
-  price     String?
-  active    Boolean  @default(false)
+  id                   String           @id @default(uuid())
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  plan                 Plan?
+  price                String?
+  active               Boolean          @default(false)
+  type                 SubscriptionType
+  priceId              String?
+  customerId           String?
+  currentPeriodEndDate DateTime?
+  subscritiptionId     String?          @unique
 
-  priceId              String
-  customerId           String
-  currentPeriodEndDate DateTime
-  subscritiptionId     String   @unique
-
-  workspaceId String
+  workspaceId String    @unique
   Workspace   Workspace @relation(fields: [workspaceId], references: [id])
 
   @@index([customerId])

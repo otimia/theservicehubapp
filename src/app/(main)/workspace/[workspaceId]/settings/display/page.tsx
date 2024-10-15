@@ -1,17 +1,17 @@
 import { Separator } from "@/components/ui/separator"
-import { ProfileForm } from "./profile-form"
+import { DisplayForm } from "./display-form"
 
-export default function SettingsProfilePage() {
+export default function SettingsDisplayPage() {
     return (
         <div className="space-y-6">
             <div>
-                <h3 className="text-lg font-medium">Profile</h3>
+                <h3 className="text-lg font-medium">Display</h3>
                 <p className="text-sm text-muted-foreground">
-                    This is how others will see you on the site.
+                    Turn items on or off to control what&apos;s displayed in the app.
                 </p>
             </div>
             <Separator />
-            <ProfileForm />
+            <DisplayForm />
         </div>
     )
 }

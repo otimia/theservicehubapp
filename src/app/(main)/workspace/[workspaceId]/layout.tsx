@@ -1,7 +1,6 @@
 import Link from "next/link"
 import {
   Bell,
-  CircleUser,
   Menu,
   Search,
 } from "lucide-react"
@@ -14,19 +13,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import Sidebar from "@/components/menu/sidebar/sidebarWorkspace"
 import Logo from "@/components/global/logo"
 import { ModeToggle } from "@/components/global/modeToggle"
+import ProfileDropdown from "@/components/menu/navbar/profileDropdown"
 
 
 type Params = {
@@ -34,6 +26,7 @@ type Params = {
 }
 
 export default function LayoutDashboard({ children, params }: { children: React.ReactNode, params: Params }) {
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -118,24 +111,9 @@ export default function LayoutDashboard({ children, params }: { children: React.
             </form>
           </div>
           <ModeToggle />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="rounded-full">
-                <CircleUser className="h-5 w-5" />
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <ProfileDropdown workspaceId={params.workspaceId} />
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 max-h-screen overflow-y-auto">
           {children}
         </main>
       </div>

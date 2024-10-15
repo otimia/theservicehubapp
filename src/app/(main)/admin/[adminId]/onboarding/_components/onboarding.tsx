@@ -8,7 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowRight, } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Check as CheckIcon, Zap, Building } from 'lucide-react'
-
+import { createWorkspace } from '@/actions/workspace/actions'
+import { redirect } from 'next/navigation'
 // Placeholder function for Stripe checkout
 const stripeCheckout = async (plan: string) => {
     // In a real application, this would redirect to Stripe
@@ -18,14 +19,15 @@ const stripeCheckout = async (plan: string) => {
     return true
 }
 
-export default function OnboardingForm() {
+export default function OnboardingForm(props: { adminId: string }) {
     const [step, setStep] = useState(1)
     const [formData, setFormData] = useState({
-        workspaceName: '',
+        name: '',
         category: '',
         employees: '',
         role: '',
-        plan: ''
+        plan: '',
+        adminId: props.adminId
     })
 
     const updateFormData = (field: string, value: string) => {
@@ -35,7 +37,7 @@ export default function OnboardingForm() {
     const isStepValid = () => {
         switch (step) {
             case 1:
-                return formData.workspaceName.length > 0
+                return formData.name.length > 0
             case 2:
                 return formData.category && formData.employees && formData.role
             case 3:
@@ -49,13 +51,41 @@ export default function OnboardingForm() {
         if (isStepValid()) {
             if (step === 3) {
                 if (formData.plan === 'free') {
-                    // Onboarding complete for free plan
-                    alert('Onboarding complete! Welcome to your free plan.')
+                    const workspace = await createWorkspace(formData)
+                    console.log(workspace)
+                    redirect(`/admin/${props.adminId}/workspace`)
                 } else {
                     // Redirect to Stripe checkout for paid plans
                     const success = await stripeCheckout(formData.plan)
                     if (success) {
-                        alert(`Onboarding complete! Welcome to your ${formData.plan} plan.`)
+                        const workspace = await createWorkspace(formData)
+
+                        if (workspace) {
+                            return (
+                                <div>
+                                    <Card>
+                                        <CardHeader>
+                                            <CardTitle>
+                                                Payment successful
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p>
+                                                You have successfully subscribed to the {formData.plan} plan.
+                                            </p>
+                                        </CardContent>
+                                        <CardFooter>
+                                            <Button onClick={() => redirect(`/workspace/${workspace.id}`)}>
+                                                Go to workspace
+                                            </Button>
+                                            <Button variant="outline" onClick={() => redirect(`/admin/${props.adminId}/workspace`)}>
+                                                Go To Admin
+                                            </Button>
+                                        </CardFooter>
+                                    </Card>
+                                </div>
+                            )
+                        }
                     }
                 }
             } else {
@@ -84,8 +114,8 @@ export default function OnboardingForm() {
                         <Label htmlFor="workspace-name">Workspace name</Label>
                         <Input
                             id="workspace-name"
-                            value={formData.workspaceName}
-                            onChange={(e) => updateFormData('workspaceName', e.target.value)}
+                            value={formData.name}
+                            onChange={(e) => updateFormData('name', e.target.value)}
                             placeholder="Enter your workspace name"
                         />
                     </div>
