@@ -8,17 +8,16 @@ import { createAdmin } from '@/actions/admin/actions'
 async function AdminPage() {
     const user = await currentUser()
     if (!user) {
-        redirect('/sign-in')
+        return redirect('/sign-in')
     }
     const admin = await getAdmin()
 
     if (admin === null) {
         const createdAdmin = await createAdmin({ userId: user?.id as string })
-        redirect(`/admin/${createdAdmin?.id}/onboarding`)
+        return redirect(`/admin/${createdAdmin?.id}/onboarding`)
     }
 
-    redirect(`/admin/${admin?.dbAdmin?.id}/workspace`)
-
+    return redirect(`/admin/${admin?.dbAdmin?.id}/workspace`)
 }
 
 export default AdminPage
