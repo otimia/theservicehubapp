@@ -47,7 +47,7 @@ export default function CreateOrganization() {
                         value={organizationName || ""}
                         onChange={(e) => setOrganizationName(e.currentTarget.value)}
                     />
-                    <Button type="submit">Create organization</Button>
+                    <Button disabled={form.formState.isSubmitting} type="submit">{form.formState.isSubmitting ? "Creating..." : "Create organization"}</Button>
                 </div>
             </form>
         </Form>
