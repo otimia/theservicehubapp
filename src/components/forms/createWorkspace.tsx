@@ -1,70 +1,54 @@
 'use client'
 
-import React from 'react'
-import { useForm } from 'react-hook-form'
+import { useOrganizationList } from '@clerk/nextjs'
+import { useState } from 'react'
 import { z } from 'zod'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { Input } from '../ui/input'
-import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
-import { createWorkspace } from '@/actions/workspace/actions'
-import { SubscriptionType } from '@prisma/client'
-type Props = {
-    adminId: string
-}
+import { useOrganization } from '@clerk/nextjs'
+import { Form } from '../ui/form'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
 
-const workspaceSchema = z.object({
-    name: z.string().min(1),
-    adminId: z.string().min(1),
-    subscription: z.string().optional(),
-    description: z.string().optional(),
+
+const createWorkspaceSchema = z.object({
+    name: z.string().min(3),
 })
 
-
-export default function CreateWorkspace(props: Props) {
+export default function CreateOrganization() {
+    const { createOrganization } = useOrganizationList()
+    const [organizationName, setOrganizationName] = useState('')
     const router = useRouter()
-    const form = useForm<z.infer<typeof workspaceSchema>>({
-        resolver: zodResolver(workspaceSchema),
+    const orgId = useOrganization()
+
+    const form = useForm<z.infer<typeof createWorkspaceSchema>>({
+        resolver: zodResolver(createWorkspaceSchema),
         defaultValues: {
             name: '',
-            adminId: props.adminId,
-            subscription: 'free' as SubscriptionType,
         },
     })
+    const onSubmit = (data: z.infer<typeof createWorkspaceSchema>) => {
+        createOrganization?.({ name: data.name })
+        setOrganizationName('')
 
-    const onSubmit = async (values: z.infer<typeof workspaceSchema>) => {
-        const newWorkspace = await createWorkspace(
-            {
-                name: values.name,
-                adminId: values.adminId,
-                subscription: values.subscription as SubscriptionType,
-            }
-        )
-        console.log("newWorkspace", newWorkspace)
-        router.refresh()
+        router.push(`/workspace/${orgId.organization?.id}`)
     }
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Name</FormLabel>s
-                            <FormDescription>
-                                This is the name of the workspace
-                            </FormDescription>
-                            <FormControl>
-                                <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button disabled={form.formState.isSubmitting} className='w-full' type="submit">Create Workspace</Button>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className='flex flex-col gap-4'>
+                    <Label>Organization name</Label>
+                    <Input {...form.register('name')}
+                        type="text"
+                        name="name"
+                        value={organizationName || ""}
+                        onChange={(e) => setOrganizationName(e.currentTarget.value)}
+                    />
+                    <Button type="submit">Create organization</Button>
+                </div>
             </form>
         </Form>
     )

@@ -1,16 +1,18 @@
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import Link from 'next/link'
 import { CircleUser } from 'lucide-react'
 import React from 'react'
-import { getAdmin } from '@/actions/admin/actions'
-import Link from 'next/link'
+import { SignOutButton } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 
-type Props = {
+type Params = {
     workspaceId: string
 }
 
-const profileDropdown = async (props: Props) => {
-    const admin = await getAdmin()
+export default async function ProfileDropdown({ workspaceId }: Params) {
+
+    const user = await currentUser()
     return (
         <div>
             <DropdownMenu>
@@ -21,21 +23,22 @@ const profileDropdown = async (props: Props) => {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel>{user ? user.fullName : 'My Account'}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Settings</DropdownMenuItem>
-                    <DropdownMenuItem>Support</DropdownMenuItem>
-                    {admin?.dbAdmin && (
-                        <DropdownMenuItem>
-                            <Link href={`/admin/${props.workspaceId}/workspace`}>Admin</Link>
-                        </DropdownMenuItem>
-                    )}
+                    <DropdownMenuItem asChild>
+                        <Link className='cursor-pointer' href={`/workspace/${workspaceId}/settings/workspace`}>Workspace</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link className='cursor-pointer' href={`/workspace/${workspaceId}/settings`}>Settings</Link>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Logout</DropdownMenuItem>
+                    <DropdownMenuItem className='cursor-pointer'>
+                        <SignOutButton>
+                            Logout
+                        </SignOutButton>
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>
     )
 }
-
-export default profileDropdown

@@ -1,7 +1,10 @@
-import { Separator } from "@/components/ui/separator"
-import { ProfileForm } from "./profile-form"
+import { Separator } from "@/components/ui/separator";
+import { ProfileForm } from "./profile-form";
+import { getUser } from "@/actions/clerk/user/actions";
 
-export default function SettingsProfilePage() {
+export default async function SettingsProfilePage() {
+    const { userData } = await getUser();  // Get only serializable user data
+
     return (
         <div className="space-y-6">
             <div>
@@ -11,7 +14,8 @@ export default function SettingsProfilePage() {
                 </p>
             </div>
             <Separator />
-            <ProfileForm />
+            {/* Pass only plain userData object */}
+            <ProfileForm user={userData} />
         </div>
-    )
+    );
 }

@@ -63,7 +63,7 @@ const dummyMenuItems = [
         href: "settings",
         icon: CircleUser,
         submenu: [
-            { label: "Profile", value: "profile", href: "settings/profile" },
+            { label: "Profile", value: "", href: "settings" },
             { label: "Workspace", value: "workspace", href: "settings/workspace" },
         ],
     },

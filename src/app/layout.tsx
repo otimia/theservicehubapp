@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { ClerkProvider } from '@clerk/nextjs';
 import "./globals.css";
 import { ThemeProvider } from "@/components/provider/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
+import { ClerkProvider } from "@clerk/nextjs";
 
 
 const geistSans = localFont({
@@ -38,9 +38,11 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        ><ClerkProvider>
+        >
+          <ClerkProvider>
             {children}
-          </ClerkProvider></ThemeProvider>
+          </ClerkProvider>
+        </ThemeProvider>
         <Toaster />
       </body>
     </html>

@@ -1,5 +1,11 @@
 import React from 'react'
 
-export default function Page() {
-    return <div>Dashboard</div>
+function page() {
+    return (
+        <div>
+            <h1>Workspace</h1>
+        </div>
+    )
 }
+
+export default page

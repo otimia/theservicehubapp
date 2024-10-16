@@ -19,6 +19,7 @@ import Sidebar from "@/components/menu/sidebar/sidebarWorkspace"
 import Logo from "@/components/global/logo"
 import { ModeToggle } from "@/components/global/modeToggle"
 import ProfileDropdown from "@/components/menu/navbar/profileDropdown"
+import { OrganizationSwitcher } from "@/components/global/organizationSwitcher"
 
 
 type Params = {
@@ -42,6 +43,7 @@ export default function LayoutDashboard({ children, params }: { children: React.
           </div>
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+              <OrganizationSwitcher />
               <Sidebar workspaceId={params.workspaceId} />
             </nav>
           </div>
@@ -113,8 +115,12 @@ export default function LayoutDashboard({ children, params }: { children: React.
           <ModeToggle />
           <ProfileDropdown workspaceId={params.workspaceId} />
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 max-h-screen overflow-y-auto">
-          {children}
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+          <div
+            className="flex flex-1 p-6 items-start justify-start rounded-lg border border-dashed shadow-sm" x-chunk="dashboard-02-chunk-1"
+          >
+            {children}
+          </div>
         </main>
       </div>
     </div>
